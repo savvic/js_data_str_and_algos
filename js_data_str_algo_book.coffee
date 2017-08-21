@@ -580,7 +580,7 @@ class Dictionary
     if @has(key) then @items[key] else undefined
 
   clear: () ->
-    items = {}
+    @items = {}
 
   size: () ->
     Object.keys(@items).length
@@ -919,7 +919,7 @@ printNode = (value) ->
 # https://pl.wikipedia.org/wiki/Drzewo_czerwono-czarne
 # https://github.com/loiane/javascript-datastructures-algorithms/tree/second-edition/chapter08
 
-tree = new BinarySearchTree
+# tree = new BinarySearchTree
 
 # tree.insert 11
 # tree.insert 7
@@ -946,13 +946,32 @@ tree = new BinarySearchTree
 
 # log tree.remove 16
 
+# STACK 62/218
+
+class Stack
+  constructor: (items) ->
+    @items = []
+
+  push: (element) ->
+    @items.push element
+  pop: ->
+    @items.pop()
+  peek: ->
+    @items[@items.length - 1]
+  isEmpty: ->
+    return @items.length == 0
+  clear: ->
+    @items = []
+  size: ->
+    @items.length
+
 
 # GRAPHS 162/218
 
 class Graph
   constructor: (vertices, adjList) ->
     @vertices = []
-    @adjList = new Dictionary
+    @adjList = new Dictionary # line 562
 
   addVertex: (v) ->
     @vertices.push v
@@ -989,19 +1008,40 @@ class Graph
 
   bfs: (v, callback) ->
     color = @initColor()
-    queue = new Queue()
+    queue = new Queue() # line 161
+    distance = []
+    predecessor = []
+    loopCount = 0
+    forLoops = 0
+
     queue.enqueue v
+    for i in @vertices
+      distance[i] = 0
+      predecessor[i] = null
     while not queue.isEmpty()
+      loopCount += 1
+      log queue
       u = queue.dequeue()
+      log u
       neighbors = @adjList.get u
+      log neighbors
       color[u] = 'grey'
-      for i in neighbors
-        if color[i] is 'white'
-          color[i] = 'grey'
-          queue.enqueue i
+      log color[u]
+      for w in neighbors
+        forLoops += 1
+        if color[w] is 'white'
+          color[w] = 'grey'
+          distance[w] = distance[u] + 1
+          predecessor[w] = u
+          queue.enqueue w # new queue - level lower
+          log queue
+          log loopCount
+          log forLoops
       color[u] = 'black'
-      if callback
-        callback u
+    return {
+      distance: distance
+      predecessor: predecessor
+    }
 
 printVertex = (v) ->
   log "visited vertex: #{v}"
@@ -1024,8 +1064,21 @@ graph.addEdge('B', 'E')
 graph.addEdge('B', 'F')
 graph.addEdge('E', 'I')
 
-log graph.toString()
-graph.bfs(myVertices[0], printVertex)
+# log graph.toString()
+# graph.bfs(myVertices[0], printVertex)
+# shortestPathA = graph.bfs(myVertices[0])
+# log shortestPathA
 
-
-
+fromVertex = myVertices[0]
+for i in myVertices
+  toVertex = i
+  path = new Stack() # line 949
+  v = toVertex
+  while v isnt fromVertex
+    path.push v
+    v = shortestPathA.predecessor[v]
+  path.push fromVertex
+  s = path.pop()
+  while not path.isEmpty()
+    s += ' - ' + path.pop()
+  log s
