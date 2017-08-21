@@ -1066,13 +1066,14 @@ graph.addEdge('E', 'I')
 
 # log graph.toString()
 # graph.bfs(myVertices[0], printVertex)
-# shortestPathA = graph.bfs(myVertices[0])
+shortestPathA = graph.bfs(myVertices[0])
 # log shortestPathA
 
 fromVertex = myVertices[0]
-for i in myVertices
-  toVertex = i
-  path = new Stack() # line 949
+i = 1
+while i < myVertices.length
+  toVertex = myVertices[i]
+  path = new Stack # line 949
   v = toVertex
   while v isnt fromVertex
     path.push v
@@ -1082,3 +1083,10 @@ for i in myVertices
   while not path.isEmpty()
     s += ' - ' + path.pop()
   log s
+  i++
+
+  # There is Dijkstra's algorithm, which solves the single-source shortest path problem
+  # for example. The Bellman–Ford algorithm solves the single-source problem if edge
+  # weights are negative. The A* search algorithm provides the shortest path for a single
+  # pair of vertices using heuristics to try to speed up the search. The Floyd–Warshall
+  # algorithm provides the shortest path for all pairs of vertices.
