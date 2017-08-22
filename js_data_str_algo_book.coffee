@@ -1043,6 +1043,23 @@ class Graph
       predecessor: predecessor
     }
 
+  dfs: (callback) ->
+    color = @initColor()
+    for i in @vertices
+      if color[i] is 'white'
+        @dfsVisit(i, color, callback)
+
+  dfsVisit: (u, color, callback) ->
+    color[u] = 'grey'
+    if callback
+      callback u
+    neighbors = @adjList.get u
+    for w in neighbors
+      if color[w] is 'white'
+        @dfsVisit(w, color, callback)
+    color[u] = 'black'
+
+
 printVertex = (v) ->
   log "visited vertex: #{v}"
 
@@ -1090,3 +1107,5 @@ while i < myVertices.length
   # weights are negative. The A* search algorithm provides the shortest path for a single
   # pair of vertices using heuristics to try to speed up the search. The Floyd–Warshall
   # algorithm provides the shortest path for all pairs of vertices.
+
+graph.dfs printVertex
