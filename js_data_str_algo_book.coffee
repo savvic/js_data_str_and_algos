@@ -969,9 +969,10 @@ class Stack
 # GRAPHS 162/218
 
 class Graph
-  constructor: (vertices, adjList) ->
+  constructor: (vertices, adjList, time) ->
     @vertices = []
     @adjList = new Dictionary # line 562
+    @time = 0
 
   addVertex: (v) ->
     @vertices.push v
@@ -979,7 +980,7 @@ class Graph
 
   addEdge: (v, w) ->
     @adjList.get(v).push(w) # to implement a directed graph this line is enough
-    @adjList.get(w).push(v)
+    # @adjList.get(w).push(v)
 
   toString: () ->
     s = ''
@@ -1045,62 +1046,81 @@ class Graph
 
   dfs: (callback) ->
     color = @initColor()
+    discoveryTime = []
+    finishTime = []
+    predecessor = []
+    @time = 1
+    for i in @vertices
+      discoveryTime[i] = 0
+      finishTime[i] = 0
+      predecessor[i] = null
     for i in @vertices
       if color[i] is 'white'
-        @dfsVisit(i, color, callback)
+        @dfsVisit(i, color, discoveryTime, finishTime, predecessor, callback)
+    return {
+      discovery: discoveryTime
+      finished: finishTime
+      predecessor: predecessor
+    }
 
-  dfsVisit: (u, color, callback) ->
+  # rule: 1 <= discoveryTime[u] < finishTime[u] <= 2|V|
+
+  dfsVisit: (u, color, discoveryTime, finishTime, predecessor, callback) ->
+    log "discovered #{u} at #{@time}"
     color[u] = 'grey'
+    discoveryTime[u] = ++@time
     if callback
       callback u
     neighbors = @adjList.get u
     for w in neighbors
       if color[w] is 'white'
-        @dfsVisit(w, color, callback)
+        predecessor[w] = u
+        @dfsVisit(w, color, discoveryTime, finishTime, predecessor, callback)
     color[u] = 'black'
-
+    finishTime[u] = ++@time
+    log "explored #{u} at #{@time}"
 
 printVertex = (v) ->
   log "visited vertex: #{v}"
 
 
-graph = new Graph()
-myVertices = ['A','B','C','D','E','F','G','H','I']
+# graph = new Graph()
+# myVertices = ['A','B','C','D','E','F','G','H','I']
 
-for i in myVertices
-  graph.addVertex i
+# for i in myVertices
+#   graph.addVertex i
 
-graph.addEdge('A', 'B')
-graph.addEdge('A', 'C')
-graph.addEdge('A', 'D')
-graph.addEdge('C', 'D')
-graph.addEdge('C', 'G')
-graph.addEdge('D', 'G')
-graph.addEdge('D', 'H')
-graph.addEdge('B', 'E')
-graph.addEdge('B', 'F')
-graph.addEdge('E', 'I')
+# graph.addEdge('A', 'B')
+# graph.addEdge('A', 'C')
+# graph.addEdge('A', 'D')
+# graph.addEdge('C', 'D')
+# graph.addEdge('C', 'G')
+# graph.addEdge('D', 'G')
+# graph.addEdge('D', 'H')
+# graph.addEdge('B', 'E')
+# graph.addEdge('B', 'F')
+# graph.addEdge('E', 'I')
 
 # log graph.toString()
 # graph.bfs(myVertices[0], printVertex)
-shortestPathA = graph.bfs(myVertices[0])
+# shortestPathA = graph.bfs(myVertices[0])
 # log shortestPathA
 
-fromVertex = myVertices[0]
-i = 1
-while i < myVertices.length
-  toVertex = myVertices[i]
-  path = new Stack # line 949
-  v = toVertex
-  while v isnt fromVertex
-    path.push v
-    v = shortestPathA.predecessor[v]
-  path.push fromVertex
-  s = path.pop()
-  while not path.isEmpty()
-    s += ' - ' + path.pop()
-  log s
-  i++
+# fromVertex = myVertices[0]
+# i = 1
+# while i < myVertices.length
+#   toVertex = myVertices[i]
+#   path = new Stack # line 949
+#   v = toVertex
+#   while v isnt fromVertex
+#     path.push v
+#     v = shortestPathA.predecessor[v]
+#   path.push fromVertex
+#   s = path.pop()
+#   while not path.isEmpty()
+#     s += ' - ' + path.pop()
+#   log s
+#   i++
 
   # There is Dijkstra's algorithm, which solves the single-source shortest path problem
   # for example. The Bellman–Ford algorithm solves the single-source problem if edge
@@ -1108,4 +1128,20 @@ while i < myVertices.length
   # pair of vertices using heuristics to try to speed up the search. The Floyd–Warshall
   # algorithm provides the shortest path for all pairs of vertices.
 
-graph.dfs printVertex
+# graph.dfs printVertex
+# graph.dfs()
+
+graph = new Graph
+myVertices = ['A','B','C','D','E','F']
+
+for i in myVertices
+  graph.addVertex i
+
+graph.addEdge('A', 'C')
+graph.addEdge('A', 'D')
+graph.addEdge('B', 'D')
+graph.addEdge('B', 'E')
+graph.addEdge('C', 'F')
+graph.addEdge('E', 'F')
+
+result = graph.dfs()
