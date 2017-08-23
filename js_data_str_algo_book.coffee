@@ -1131,17 +1131,20 @@ printVertex = (v) ->
 # graph.dfs printVertex
 # graph.dfs()
 
-graph = new Graph
-myVertices = ['A','B','C','D','E','F']
+# graph = new Graph
+# myVertices = ['A','B','C','D','E','F']
 
-for i in myVertices
-  graph.addVertex i
+# for i in myVertices
+#   graph.addVertex i
 
-graph.addEdge('A', 'C')
-graph.addEdge('A', 'D')
-graph.addEdge('B', 'D')
-graph.addEdge('B', 'E')
-graph.addEdge('C', 'F')
-graph.addEdge('E', 'F')
+# graph.addEdge('A', 'C')
+# graph.addEdge('A', 'D')
+# graph.addEdge('B', 'D')
+# graph.addEdge('B', 'E')
+# graph.addEdge('C', 'F')
+# graph.addEdge('E', 'F')
 
-result = graph.dfs()
+# result = graph.dfs()
+
+
+# SORTING AND SEARCHING ALGORITHMS 186/218
