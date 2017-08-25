@@ -1148,3 +1148,62 @@ printVertex = (v) ->
 
 
 # SORTING AND SEARCHING ALGORITHMS 186/218
+
+class ArrayList
+  constructor: (array) ->
+    @array = []
+
+  insert: (item) ->
+    @array.push item
+
+  toString: ->
+    @array.join()
+
+  swap: (index1, index2) ->
+    aux = @array[index1]
+    @array[index1] = @array[index2]
+    @array[index2] = aux
+
+# bubble sort
+
+  bubbleSort: ->
+    length = @array.length
+    i = 0
+    while i < length
+      j = 0
+      while j < length - 1
+        if @array[j] > @array[j + 1]
+          @swap j, j + 1
+        j++
+      i++
+
+  modifiedBubbleSort: ->
+    length = @array.length
+    i = 0
+    while i < length
+      j = 0
+      while j < length - 1 - i # substruct the number of passes (i) from the inner loop to avoid all unnecessary comparisons done by the innner loop
+        if @array[j] > @array[j + 1]
+          @swap j, j + 1
+        j++
+      i++
+
+
+
+
+createNonSortedArray = (size) ->
+  array = new ArrayList
+  i = size
+  while i > 0
+    array.insert i
+    i--
+  array
+
+myArray = createNonSortedArray 5
+log myArray.toString()
+myArray.bubbleSort()
+log myArray.toString()
+
+
+
+
