@@ -1188,22 +1188,73 @@ class ArrayList
         j++
       i++
 
+# selection sort - find min val, place it in 1st pos, then find 2nd minimum value and place it in 2nd pos, and so on.
+# The selection sort is also an algorithm of complexity O(n2). Like the bubble sort,
+# it contains two nested loops, which are responsible for the quadratic complexity.
 
+  selectionSort: ->
+    len = @array.length
+    for i in [0...len - 1]
+      indexMin = i
+      for j in [i...len]
+        if @array[indexMin] > @array[j]
+          indexMin = @array[j]
+      if i isnt indexMin
+        @swap i, indexMin
 
+# insertion sort
+# considering the first item already sorted
+
+  insertionSort: ->
+    len = @array.length
+    for i in [1...len]
+      j = i
+      temp = @array[i]
+      while j > 0 and @array[j - 1] > temp
+        @array[j] = @array[j - 1]
+        j--
+      @array[j] = temp
+
+# merge sort
+# first from all the above that gives a good performance, with a complexity of O(n log n)
+
+  mergeSort: ->
+    len = @array.length
+
+# ---------------------------------------------------
+
+# createNonSortedArray = (size) ->
+#   array = new ArrayList
+#   i = size
+#   while i > 0
+#     array.insert i
+#     i--
+#   array
 
 createNonSortedArray = (size) ->
   array = new ArrayList
-  i = size
-  while i > 0
+  for i in [size..1]
     array.insert i
-    i--
+  log array
   array
 
-myArray = createNonSortedArray 5
-log myArray.toString()
-myArray.bubbleSort()
-log myArray.toString()
+threeElArr = ->
+  arr = new ArrayList
+  arr.insert 3
+  arr.insert 5
+  arr.insert 4
+  log arr
+  arr
 
+# myArray = createNonSortedArray 5
+# log myArray.toString()
+# myArray.selectionSort()
+# log myArray.toString()
 
+my3Array = threeElArr()
+log my3Array.toString()
+# my3Array.selectionSort()
+my3Array.insertionSort()
+log my3Array.toString()
 
 
