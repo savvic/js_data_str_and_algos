@@ -1215,11 +1215,38 @@ class ArrayList
         j--
       @array[j] = temp
 
-# merge sort
+# merge sort - divide and conquer approach
 # first from all the above that gives a good performance, with a complexity of O(n log n)
+# Array.prototype.sort - ECMA does not define which algo to use, so each browser can implement its own (Mozilla = merge, Chrome = quick)
 
   mergeSort: ->
-    len = @array.length
+    @array = @mergeSortRec @array
+
+  mergeSortRec: (arr) ->
+    len = arr.length
+    return arr if len is 1
+    mid = Math.floor len / 2
+    left = arr.slice 0, mid
+    right = arr.slice mid, len
+    @merge @mergeSortRec(left), @mergeSortRec(right)
+
+  merge: (left, right) ->
+    result = []
+    il = 0
+    ir = 0
+
+    while il < left.length and ir < right.length
+      if left[il] < right[ir]
+        result.push left[il++]
+      else
+        result.push right[ir++]
+    while il < left.length
+      result.push left[il++]
+    while ir < right.length
+      result.push right[ir++]
+    result
+
+
 
 # ---------------------------------------------------
 
@@ -1235,7 +1262,7 @@ createNonSortedArray = (size) ->
   array = new ArrayList
   for i in [size..1]
     array.insert i
-  log array
+  # log array
   array
 
 threeElArr = ->
@@ -1243,18 +1270,19 @@ threeElArr = ->
   arr.insert 3
   arr.insert 5
   arr.insert 4
-  log arr
+  # log arr
   arr
 
-# myArray = createNonSortedArray 5
-# log myArray.toString()
+myArray = createNonSortedArray 5
+log myArray.toString()
 # myArray.selectionSort()
-# log myArray.toString()
+myArray.mergeSort()
+log myArray.toString()
 
-my3Array = threeElArr()
-log my3Array.toString()
-# my3Array.selectionSort()
-my3Array.insertionSort()
-log my3Array.toString()
+# my3Array = threeElArr()
+# log my3Array.toString()
+# # my3Array.selectionSort()
+# my3Array.insertionSort()
+# log my3Array.toString()
 
 
