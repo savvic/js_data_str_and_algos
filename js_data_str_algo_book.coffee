@@ -1164,6 +1164,11 @@ class ArrayList
     @array[index1] = @array[index2]
     @array[index2] = aux
 
+  swapQuickSort: (array, index1, index2) ->
+    aux = array[index1]
+    array[index1] = array[index2]
+    array[index2] = aux
+
 # bubble sort
 
   bubbleSort: ->
@@ -1250,12 +1255,13 @@ class ArrayList
 #divide and conquer approach
 
   quickSort: ->
-    quick @array, 0, @array.length - 1
+    log @array
+    @quick @array, 0, @array.length - 1
 
   quick: (array, left, right) ->
-    index = partition(array, left, right) if array.length > 1
-    quick(array, left, index - 1) if left < index - 1
-    quick(array, index, right) if index < right
+    index = @partition(array, left, right) if array.length > 1
+    @quick(array, left, index - 1) if left < index - 1
+    @quick(array, index, right) if index < right
 
   partition: (array, left, right) ->
     pivot = array[Math.floor (right + left) / 2]
@@ -1267,24 +1273,36 @@ class ArrayList
       while array[j] > pivot
         j--
       if i <= j
-        swapQuickSort array, i, j
+        @swapQuickSort array, i, j
         i++
         j--
     i
 
+# SEARCHING ALGORITHMS 204/218
 
+# sequential or linear search - consists of comparing each element of the data with the one we are looking for
 
+  sequentialSearch: (item) ->
+    for i in @array
+      return "item #{i} exists in #{@array} and its index is: #{@array.indexOf(i)}" if i is item
+    -1
 
+# binary search requires sorted array
 
-
-
-
-
-
-
-
-
-
+  binarySearch: (item) ->
+    arr = @mergeSort()
+    low = 0
+    high = arr.length - 1
+    while low <= high
+      mid = Math.floor((low + high) / 2)
+      element = arr[mid]
+      if element < item
+        low = mid + 1
+      else if element > item
+        high = mid - 1
+      else
+        return mid
+    -1
 
 
 # ---------------------------------------------------
@@ -1313,10 +1331,11 @@ threeElArr = ->
   arr
 
 myArray = createNonSortedArray 5
-log myArray.toString()
-# myArray.selectionSort()
-myArray.mergeSort()
-log myArray.toString()
+# log myArray.toString()
+# # myArray.selectionSort()
+# # myArray.mergeSort()
+# myArray.quickSort()
+# log myArray.toString()
 
 # my3Array = threeElArr()
 # log my3Array.toString()
@@ -1324,4 +1343,5 @@ log myArray.toString()
 # my3Array.insertionSort()
 # log my3Array.toString()
 
+log myArray.binarySearch 2
 
