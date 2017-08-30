@@ -1246,6 +1246,45 @@ class ArrayList
       result.push right[ir++]
     result
 
+# quick sort - complexity O(n log n)
+#divide and conquer approach
+
+  quickSort: ->
+    quick @array, 0, @array.length - 1
+
+  quick: (array, left, right) ->
+    index = partition(array, left, right) if array.length > 1
+    quick(array, left, index - 1) if left < index - 1
+    quick(array, index, right) if index < right
+
+  partition: (array, left, right) ->
+    pivot = array[Math.floor (right + left) / 2]
+    i = left
+    j = right
+    while i <= j
+      while array[i] < pivot
+        i++
+      while array[j] > pivot
+        j--
+      if i <= j
+        swapQuickSort array, i, j
+        i++
+        j--
+    i
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # ---------------------------------------------------
