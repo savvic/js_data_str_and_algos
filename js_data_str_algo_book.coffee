@@ -1294,15 +1294,15 @@ class ArrayList
     low = 0
     high = arr.length - 1
     while low <= high
-      mid = Math.floor((low + high) / 2)
-      element = arr[mid]
+      midIndex = Math.floor((low + high) / 2)
+      element = arr[midIndex]
       if element < item
-        low = mid + 1
+        low = midIndex + 1
       else if element > item
-        high = mid - 1
-      else
-        return mid
-    -1
+        high = midIndex - 1
+      else if element is item
+        return "#{element} is what you're looking for"
+    "#{item} not found"
 
 
 # ---------------------------------------------------
@@ -1343,5 +1343,5 @@ myArray = createNonSortedArray 5
 # my3Array.insertionSort()
 # log my3Array.toString()
 
-log myArray.binarySearch 2
+log myArray.binarySearch 6
 
